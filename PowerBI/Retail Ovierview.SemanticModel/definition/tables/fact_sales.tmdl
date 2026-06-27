@@ -1,0 +1,223 @@
+table fact_sales
+	lineageTag: 457d0ac9-0a41-4175-9db7-d4583a0a2d7a
+
+	measure 'Total Revenue' = sum(fact_sales[revenue])
+		lineageTag: 12ca682a-b944-447a-9768-236573a823bf
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Revenue per Customer' = DIVIDE([Total Revenue],[Total Customers])
+		formatString: 0
+		lineageTag: db4cc750-1971-42c4-bf96-31157fbd2bf3
+
+		changedProperty = IsHidden
+
+	measure 'Repeat Customers' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(fact_sales[customer_id]),
+			    FILTER(
+			        VALUES(fact_sales[customer_id]),
+			        CALCULATE(DISTINCTCOUNT(fact_sales[invoice]))>1
+			    )
+			)
+		formatString: 0
+		lineageTag: bb25bee8-4523-4872-afe0-bda9701b44d1
+
+		changedProperty = IsHidden
+
+	measure 'Repeat Purchase Rate%' = DIVIDE([Repeat Customers],[Total Customers])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 3baee9a6-3aa3-4756-be67-638092569551
+
+		changedProperty = IsHidden
+
+	measure 'Champion Revenue' = ```
+			
+			CALCULATE(
+			    [Total Revenue],
+			    customer_rfm[rfm_segment] = "Champion"
+			)
+			
+			```
+		lineageTag: d0959687-b63a-43ba-bb2f-d2171653d25c
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'At Risk Customers' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT(customer_rfm[customer_id]),
+			    customer_rfm[rfm_segment] = "At Risk"
+			)
+		formatString: 0
+		lineageTag: a0779c35-8a0f-4c8d-b962-1df089689b60
+
+		changedProperty = IsHidden
+
+	measure 'At Risk Revenue' =
+			
+			CALCULATE(
+			    [Total Revenue],
+			    customer_rfm[rfm_segment] = "At Risk"
+			)
+		lineageTag: 235019e6-885b-4307-9d42-ae80078bfbd3
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg CLV' =
+			
+			AVERAGEX(
+			    VALUES(dim_customer[customer_id]),
+			    CALCULATE([Total Revenue])
+			)
+		lineageTag: dd1945a9-92cf-449f-8c59-c3ddaa5ff7cd
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Repeat Purchase %' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        DISTINCTCOUNT(fact_sales[customer_id]),
+			        FILTER(
+			            VALUES(fact_sales[customer_id]),
+			            CALCULATE(DISTINCTCOUNT(fact_sales[invoice])) > 1
+			        )
+			    ),
+			    DISTINCTCOUNT(fact_sales[customer_id])
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e28d0ee4-950d-4780-b2e2-f3eabc65df2a
+
+	measure 'Total Revenue All' = CALCULATE([Total Revenue],ALLEXCEPT(fact_sales,fact_sales[invoicedate]))
+		lineageTag: 105e3c0d-293c-47b4-a286-8188e39ce794
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue %' = DIVIDE([Total Revenue],[Total Revenue All])
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8b4b0bad-5d96-451e-9d29-17d77993c90b
+
+	column invoice
+		dataType: string
+		lineageTag: 084cfdf8-2628-4a54-b11c-3bf296bab80a
+		summarizeBy: none
+		sourceColumn: invoice
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column stockcode
+		dataType: string
+		lineageTag: 6bb3c66d-867f-4586-b151-d49b9a26782e
+		summarizeBy: none
+		sourceColumn: stockcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column description
+		dataType: string
+		lineageTag: 70a81edb-d011-462b-a97a-224efff4f267
+		summarizeBy: none
+		sourceColumn: description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column quantity
+		dataType: int64
+		formatString: #,0
+		lineageTag: e8ffc3e9-5d73-4e1a-b5a3-66f3cb6f63e6
+		summarizeBy: sum
+		sourceColumn: quantity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column invoicedate
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 3ebe8c63-9b96-4551-b6e7-86ba5a7c881c
+		summarizeBy: none
+		sourceColumn: invoicedate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column price
+		dataType: double
+		lineageTag: 61c9338a-2432-472e-acad-6f963a45a3e1
+		summarizeBy: sum
+		sourceColumn: price
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column customer_id
+		dataType: int64
+		formatString: 0
+		lineageTag: e29b56e6-b451-49b8-9e8d-99f8643b8abb
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: 98df14a1-c430-4f58-b800-bb27e8e8c845
+		summarizeBy: none
+		sourceColumn: country
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column revenue
+		dataType: double
+		lineageTag: 5535b11d-f472-43fc-99c4-6fd8a35c90c4
+		summarizeBy: sum
+		sourceColumn: revenue
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_sales = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\BI project\DeltaTable\fact_sales.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"invoicedate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

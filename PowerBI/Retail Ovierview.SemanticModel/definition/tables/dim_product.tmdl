@@ -1,0 +1,35 @@
+table dim_product
+	lineageTag: b36e09cf-380b-4c2a-a127-fb47a974d1b9
+
+	column product_description
+		dataType: string
+		lineageTag: ec17fff4-5e47-4c78-b204-05d373c2d101
+		summarizeBy: none
+		sourceColumn: product_description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column stockcode
+		dataType: string
+		lineageTag: 7172eed3-2ba9-4501-bba0-99dc233f2d67
+		summarizeBy: none
+		sourceColumn: stockcode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_product = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\BI project\DeltaTable\dim_product.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

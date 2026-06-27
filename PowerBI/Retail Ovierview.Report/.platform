@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Retail Ovierview"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8b8d878b-6c5b-4534-a898-bad78f97017e"
+  }
+}

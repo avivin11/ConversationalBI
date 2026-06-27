@@ -1,0 +1,36 @@
+relationship 0aa2b2b8-ad41-47e9-aa4e-e9cef8d2f691
+	joinOnDateBehavior: datePartOnly
+	fromColumn: date_dim.date
+	toColumn: LocalDateTable_9eaefaf0-c7a5-46d5-ac8c-198b3a4d8577.Date
+
+relationship 3580ed85-9d70-4533-8117-a93672a82e91
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_customer.first_purchase
+	toColumn: LocalDateTable_2838e6f4-187d-44ac-9f11-e8df99dc8883.Date
+
+relationship f4f226c4-5f61-4941-9a79-c3ae43eb7557
+	joinOnDateBehavior: datePartOnly
+	fromColumn: dim_customer.last_purchase
+	toColumn: LocalDateTable_95f26f64-a5bc-4b57-8139-b0ffd7dbefbe.Date
+
+relationship 8b7f5bf9-0486-4e1b-9d35-596ced414b53
+	fromColumn: fact_sales.customer_id
+	toColumn: dim_customer.customer_id
+
+relationship f9f4a3f8-ecfc-c763-4a7e-368cd3adc7aa
+	fromColumn: fact_sales.invoicedate
+	toColumn: date_dim.date_key
+
+relationship AutoDetected_f071ad1f-3dbb-46b3-a625-e4b81d55a9ee
+	fromColumn: fact_sales.stockcode
+	toColumn: dim_product.stockcode
+
+relationship 2e2509b5-0f02-4fd5-8bda-3841fc5f1700
+	joinOnDateBehavior: datePartOnly
+	fromColumn: date_dim.date_key
+	toColumn: LocalDateTable_fc6ec581-ad55-4ba9-8f29-d50bec1ef577.Date
+
+relationship 9d8a308c-d903-6028-4a6e-a8f57f026e8d
+	fromColumn: fact_sales.customer_id
+	toColumn: customer_rfm.customer_id
+

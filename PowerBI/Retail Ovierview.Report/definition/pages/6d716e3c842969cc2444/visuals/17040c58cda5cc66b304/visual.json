@@ -1,0 +1,148 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "17040c58cda5cc66b304",
+  "position": {
+    "x": 0,
+    "y": 120,
+    "z": 2000,
+    "height": 120,
+    "width": 320,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "multiRowCard",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "customer_rfm"
+                        }
+                      },
+                      "Property": "recency"
+                    }
+                  },
+                  "Function": 4
+                }
+              },
+              "queryRef": "customer_rfm.recency",
+              "nativeQueryRef": "Max of Recency",
+              "displayName": "Max of Recency"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "customer_rfm"
+                        }
+                      },
+                      "Property": "frequency"
+                    }
+                  },
+                  "Function": 4
+                }
+              },
+              "queryRef": "customer_rfm.frequency",
+              "nativeQueryRef": "Max of Frequency",
+              "displayName": "Max of Frequency"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "customer_rfm"
+                        }
+                      },
+                      "Property": "monetary"
+                    }
+                  },
+                  "Function": 4
+                }
+              },
+              "queryRef": "customer_rfm.monetary",
+              "nativeQueryRef": "Max of Monetary",
+              "displayName": "Max of Monetary"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "customer_rfm"
+                      }
+                    },
+                    "Property": "recency"
+                  }
+                },
+                "Function": 4
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "card": [
+        {
+          "properties": {
+            "barShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryLabels": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dataLabels": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

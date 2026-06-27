@@ -1,0 +1,120 @@
+table customer_rfm
+	lineageTag: a097814c-1873-4a78-8dd9-c67d6d72518e
+
+	measure 'Customer by segment' = DISTINCTCOUNT(customer_rfm[customer_id])
+		formatString: 0
+		lineageTag: 1623b8aa-a92f-4f50-bae7-e72eadb0e250
+
+		changedProperty = IsHidden
+
+	measure 'Champion Revenue %' =
+			
+			DIVIDE(
+			    [Champion Revenue],
+			    [Total Revenue]
+			)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 6c450343-0358-4998-b701-508b2168dd9e
+
+		changedProperty = IsHidden
+
+	column customer_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 5c85e004-97b9-434b-b546-70a7a87e9f29
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column recency
+		dataType: int64
+		formatString: 0
+		lineageTag: 8b9409b9-27a4-435e-af86-6bfaa3f606d9
+		summarizeBy: none
+		sourceColumn: recency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column frequency
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b9cdac3-ed74-4b4f-b4b4-926d17d1c32a
+		summarizeBy: none
+		sourceColumn: frequency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column monetary
+		dataType: double
+		lineageTag: 6bdc6abb-b253-46f1-92d5-42784a1a279f
+		summarizeBy: none
+		sourceColumn: monetary
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column R
+		dataType: int64
+		formatString: 0
+		lineageTag: 437225a4-1674-44c8-a1e0-fe225bbc85d9
+		summarizeBy: none
+		sourceColumn: R
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column F
+		dataType: int64
+		formatString: 0
+		lineageTag: 6070ab3e-2f38-4ab0-a660-7cff9127fba7
+		summarizeBy: none
+		sourceColumn: F
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column M
+		dataType: int64
+		formatString: 0
+		lineageTag: 7996215a-2f2d-46b5-adac-5dae8a8f574f
+		summarizeBy: none
+		sourceColumn: M
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column rfm_segment
+		dataType: string
+		lineageTag: ff0a5246-aa07-4a7b-8bf5-81b9db7d6dbf
+		summarizeBy: none
+		sourceColumn: rfm_segment
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition customer_rfm = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\BI project\DeltaTable\customer_rfm.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

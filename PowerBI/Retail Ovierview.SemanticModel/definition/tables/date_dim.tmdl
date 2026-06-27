@@ -1,0 +1,108 @@
+table date_dim
+	lineageTag: 1170556d-db82-47db-a0ba-ce96c96a2887
+
+	column date
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 1b17fa83-ba8b-4b55-a311-257a7de0cae1
+		summarizeBy: none
+		sourceColumn: date
+
+		variation Variation
+			isDefault
+			relationship: 0aa2b2b8-ad41-47e9-aa4e-e9cef8d2f691
+			defaultHierarchy: LocalDateTable_9eaefaf0-c7a5-46d5-ac8c-198b3a4d8577.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column date_key
+		dataType: dateTime
+		formatString: dd-mm-yyyy
+		lineageTag: 75eb3abe-9e0b-4b15-8de0-1670c3c995db
+		summarizeBy: none
+		sourceColumn: date_key
+
+		variation Variation
+			isDefault
+			relationship: 2e2509b5-0f02-4fd5-8bda-3841fc5f1700
+			defaultHierarchy: LocalDateTable_fc6ec581-ad55-4ba9-8f29-d50bec1ef577.'Date Hierarchy'
+
+		changedProperty = DataType
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 79142bad-b1a2-44f8-8ddc-03cadf8db05c
+		summarizeBy: sum
+		sourceColumn: year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column month
+		dataType: int64
+		formatString: 0
+		lineageTag: 31ee0b6e-851f-4cf8-8231-6993dac8aae0
+		summarizeBy: sum
+		sourceColumn: month
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_name
+		dataType: string
+		lineageTag: 439a0bfa-43a1-4547-b5ce-9f7dec21595d
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter
+		dataType: string
+		lineageTag: 83135a6d-ee1d-4634-b5b9-7b62f0819bf3
+		summarizeBy: none
+		sourceColumn: quarter
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month
+		dataType: string
+		lineageTag: afec94cf-7e37-4ebf-95a6-cc6ba9d742ed
+		summarizeBy: none
+		sourceColumn: year_month
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition date_dim = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\BI project\DeltaTable\date_dim.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

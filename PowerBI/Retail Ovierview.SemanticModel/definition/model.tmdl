@@ -1,0 +1,27 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["customer_rfm","date_dim","dim_customer","fact_sales","dim_product"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table DateTableTemplate_865aa761-8329-4ff5-ba48-66bbd7c1dbaa
+ref table customer_rfm
+ref table date_dim
+ref table LocalDateTable_9eaefaf0-c7a5-46d5-ac8c-198b3a4d8577
+ref table dim_customer
+ref table LocalDateTable_2838e6f4-187d-44ac-9f11-e8df99dc8883
+ref table LocalDateTable_95f26f64-a5bc-4b57-8139-b0ffd7dbefbe
+ref table fact_sales
+ref table dim_product
+ref table LocalDateTable_fc6ec581-ad55-4ba9-8f29-d50bec1ef577
+
+ref cultureInfo en-US
+

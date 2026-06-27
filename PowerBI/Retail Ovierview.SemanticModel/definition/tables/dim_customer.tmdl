@@ -1,0 +1,161 @@
+table dim_customer
+	lineageTag: a705e868-0562-4764-90f3-82a876fdabac
+
+	measure 'Total Customers' = DISTINCTCOUNT(dim_customer[customer_id])
+		formatString: 0
+		lineageTag: e2ea8318-e7d6-43ed-aeb0-2a9b3c816627
+
+		changedProperty = IsHidden
+
+	column customer_id
+		dataType: int64
+		formatString: 0
+		lineageTag: 061f7430-0807-4481-82d0-08be73172cef
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column country
+		dataType: string
+		lineageTag: c9c66282-d08a-40e9-ab0e-85368debf4e3
+		summarizeBy: none
+		sourceColumn: country
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_revenue
+		dataType: double
+		lineageTag: b9c29c8f-4e67-4688-b935-70576b722b35
+		summarizeBy: sum
+		sourceColumn: total_revenue
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column total_orders
+		dataType: int64
+		formatString: 0
+		lineageTag: 381a1fff-35ed-4c06-8b90-936c19777a9c
+		summarizeBy: sum
+		sourceColumn: total_orders
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_order_value
+		dataType: double
+		lineageTag: c88d5201-bd46-4910-8b6e-2ac7d2e90571
+		summarizeBy: sum
+		sourceColumn: avg_order_value
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column first_purchase
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f051af10-e5cb-4f7b-a6fb-7f86c53c5335
+		summarizeBy: none
+		sourceColumn: first_purchase
+
+		variation Variation
+			isDefault
+			relationship: 3580ed85-9d70-4533-8117-a93672a82e91
+			defaultHierarchy: LocalDateTable_2838e6f4-187d-44ac-9f11-e8df99dc8883.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column last_purchase
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 46e27ff1-0edf-469d-9f90-d9b9bb38b56f
+		summarizeBy: none
+		sourceColumn: last_purchase
+
+		variation Variation
+			isDefault
+			relationship: f4f226c4-5f61-4941-9a79-c3ae43eb7557
+			defaultHierarchy: LocalDateTable_95f26f64-a5bc-4b57-8139-b0ffd7dbefbe.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_lifetime_days
+		dataType: int64
+		formatString: 0
+		lineageTag: b0d7b578-f140-43f2-bd88-457754246d81
+		summarizeBy: sum
+		sourceColumn: customer_lifetime_days
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"dim_customer","TableItemName":"Customer lifetime days","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column 'Customer lifetime days' =
+			IF(
+				ISBLANK('dim_customer'[customer_lifetime_days]),
+				BLANK(),
+				INT('dim_customer'[customer_lifetime_days] / 30) * 30
+			)
+		formatString: 0
+		lineageTag: 4916e1a3-26c8-4bef-8604-59d3cccc17c2
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [
+				    {
+				      "Column": {
+				        "Expression": {
+				          "SourceRef": {
+				            "Entity": "dim_customer"
+				          }
+				        },
+				        "Property": "customer_lifetime_days"
+				      }
+				    }
+				  ],
+				  "binningMetadata": {
+				    "binSize": {
+				      "value": 30.0,
+				      "unit": 0
+				    }
+				  }
+				}
+
+		changedProperty = IsHidden
+
+		annotation GroupingDesignState = {"Version":0,"Sources":[{"Name":"d","Entity":"dim_customer"}],"GroupedColumns":[{"Column":{"Expression":{"SourceRef":{"Source":"d"}},"Property":"customer_lifetime_days"}}],"BinItem":{"Expression":{"Floor":{"Expression":{"Column":{"Expression":{"SourceRef":{"Source":"d"}},"Property":"customer_lifetime_days"}},"Size":30.0}}}}
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_customer = m
+		mode: import
+		source =
+				let
+				    Source = Parquet.Document(File.Contents("C:\BI project\DeltaTable\dim_customer.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null])
+				in
+				    Source
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
