@@ -20,7 +20,9 @@ load_dotenv()
 
 from langchain_groq import ChatGroq
 
+print("import successful. Checking for GROQ_API_KEY in environment...")
 api_key = os.getenv("GROQ_API_KEY")
+model=os.getenv("GROQ_MODEL")
 
 if not api_key:
     print("❌ GROQ_API_KEY not found in environment.")
@@ -35,7 +37,7 @@ print("🔑 API key found. Testing connection to Groq...")
 try:
     llm = ChatGroq(
         api_key=api_key,
-        model="llama3-70b-8192",
+        model=model,
         temperature=0.0,
     )
 
@@ -51,3 +53,12 @@ except Exception as e:
     print("  - Invalid API key (copy it again from console.groq.com)")
     print("  - No internet connection")
     print("  - Groq rate limit (wait 1 minute and retry)")
+
+
+
+
+
+# import sys
+# import os
+# # sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# print(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -7,8 +7,8 @@
 
 | # | Phase | Goal | Status |
 |---|---|---|---|
-| 0 | Environment setup | Python env, installs, API keys verified | 🟡 In Progress |
-| 1 | PBIP extraction + ChromaDB ingestion | Parse semantic model → embed into vector store | ⬜ Not started |
+| 0 | Environment setup | Python env, installs, API keys verified | Completed |
+| 1 | PBIP extraction + ChromaDB ingestion | Parse semantic model → embed into vector store | 🟡 In Progress |
 | 2 | NL-to-SQL agent + RAG chain | LLM answers questions using live data + semantic context | ⬜ Not started |
 | 3 | Streamlit chatbot UI | Working chat interface with chart output | ⬜ Not started |
 | 4 | Power BI embed + deploy | Chatbot inside .pbix + public Streamlit URL | ⬜ Not started |
@@ -58,139 +58,62 @@
 
 ## ✅ Completed Phases
 
-*(None yet — will be populated as phases are confirmed done)*
+# Phase0 Completed
+---
+
+✅ Task 0.1 — Virtual environment created
+✅ Task 0.2 — Dependencies installed
+✅ Task 0.3 — .env file created with GROQ_API_KEY
+✅ Task 0.4 — All imports verified
+✅ Task 0.5 — Groq API call returns response
+---
+
+Phase 1 — COMPLETE ✅
+✅ TMDL parser written and tested
+✅ 20 documents extracted from retail semantic model
+✅ Embedding model downloaded (all-MiniLM-L6-v2)
+✅ ChromaDB vectorstore built (chroma_db/ folder created)
+✅ Retrieval test passing
+
+AI concepts learned:
+- Embeddings: text → 384 numbers representing meaning
+- Chunking: one document per measure = precise retrieval
+- Vector store: similarity search by meaning, not keywords
+- RAG foundation: knowledge base is now ready for Phase 2
+
+
 
 ---
 
-## 🟡 Current Phase — Phase 0: Environment Setup
-
-### What we are doing
-Setting up the Python environment, installing all dependencies, configuring API keys, and verifying every tool loads correctly before any project code is written.
-
-### What has been completed so far
-
-#### Project scaffold generated ✅
-A full project folder structure was generated with all module files pre-built and annotated. This was done so implementation can begin immediately in each phase without wasting time on boilerplate.
-
-**Files created:**
-```
-rag_bi/
-├── requirements.txt          ← all pip installs pinned to stable versions
-├── .env.example              ← safe API key template
-├── .gitignore                ← excludes .env and chroma_db from git
-├── ingest.py                 ← CLI to build vectorstore (run once per model update)
-├── utils/config.py           ← central config — API keys, model names, paths
-├── semantic/pbip_parser.py   ← PBIP model.bim parser → LangChain Documents
-├── semantic/semantic_model.md← hand-written fallback knowledge base (starter)
-├── vectorstore/embedder.py   ← ChromaDB embed + retrieval helpers
-├── agent/llm.py              ← Groq / Gemini LLM loader (one-line swap)
-├── agent/rag_chain.py        ← full RAG + SQL agent combined chain
-└── ui/app.py                 ← Streamlit chat UI
-```
-
-**Why it was done this way:**
-Each file has inline AI concept explanations as comments — this is intentional. The goal is not just to have working code but to understand every decision. Every file is functions-only (no classes), synchronous, and readable at a basic Python level.
-
-**Inline learning built into the code:**
-- `embedder.py` explains what embeddings are in plain English before the first function
-- `rag_chain.py` explains Track A vs Track B and why both are needed
-- `pbip_parser.py` explains what a PBIP file is and how to get one
 
 ---
 
-### What still needs to be done to complete Phase 0
+Phase 2 — COMPLETE ✅
 
-#### ⬜ Task 0.1 — Create virtual environment
-```bash
-# Run in your project folder (e.g. C:\Projects\rag_bi)
-python -m venv venv
-venv\Scripts\activate          # Windows
-# source venv/bin/activate     # Mac / Linux
-```
-**Confirm done:** Terminal prompt shows `(venv)` prefix.
+✅ get_semantic_context() — retrieves from ChromaDB
+✅ load_llm() — loads Groq LLM
+✅ generate_answer() — sends context + question to LLM  
+✅ answer() — main entry point, returns dict with answer + context
 
-#### ⬜ Task 0.2 — Install all dependencies
-```bash
-pip install -r requirements.txt
-```
-**Known watch-out:** This installs sentence-transformers which downloads the all-MiniLM-L6-v2 model (~80MB) on first use — not on install. So install will be fast; first `ingest.py` run will be slower.
-**Confirm done:** No red error lines. Warnings about metadata are fine.
-
-#### ⬜ Task 0.3 — Create .env file and add Groq API key
-```bash
-copy .env.example .env        # Windows
-# cp .env.example .env        # Mac / Linux
-```
-Then open `.env` and paste your key:
-- Groq free key: https://console.groq.com → API Keys → Create
-- Gemini free key: https://aistudio.google.com → Get API Key
-
-**Confirm done:** `.env` exists, `GROQ_API_KEY` is filled in.
-
-#### ⬜ Task 0.4 — Verify all imports load
-```bash
-python -c "import langchain, chromadb, streamlit; from langchain_groq import ChatGroq; print('All imports OK')"
-```
-**Confirm done:** Prints `All imports OK`.
-
-#### ⬜ Task 0.5 — Test Groq API call
-```python
-# Run this as a one-off script: python test_groq.py
-from dotenv import load_dotenv
-import os
-load_dotenv()
-from langchain_groq import ChatGroq
-
-llm = ChatGroq(api_key=os.getenv("GROQ_API_KEY"), model="llama3-70b-8192")
-response = llm.invoke("Say: Groq is working.")
-print(response.content)
-```
-**Confirm done:** Prints a response from the LLM. No auth errors.
-
+AI concepts learned:
+- Full RAG loop working end to end
+- Returning dict from main function keeps UI clean
+- LLM says "I don't know" when context is incomplete — correct behaviour
+- Context quality determines answer quality
 ---
 
-### AI concepts introduced this phase
+Phase 3 — COMPLETE ✅
 
-| Concept | Plain English explanation |
-|---|---|
-| LLM API vs local model | Instead of running a model on your laptop (impossible — too slow), you send text to Groq's servers over the internet and get a response back. Same pattern as calling a SQL Server — you send a query, you get results. |
-| API key | Your personal authentication token for the LLM service. Like a SQL Server connection string — it proves you're allowed to use it. Never commit it to git. |
-| Virtual environment | An isolated Python installation for this project only — so its package versions don't conflict with other projects on your machine. Same concept as a separate SQL Server instance per environment. |
+✅ Block 1: page setup
+✅ Block 2: session state initialised
+✅ Block 3: chat history displayed on rerun
+✅ Block 4: user input handled, RAG chain called, answer displayed
 
----
-
-### Future dependency — what Phase 1 needs from Phase 0
-
-Phase 1 cannot start until:
-- [x] Scaffold files exist (done — generated in this session)
-- [ ] `pip install -r requirements.txt` completes without error
-- [ ] `.env` file exists with a valid `GROQ_API_KEY`
-- [ ] All imports verified working
-- [ ] Groq API test call returns a response
-
----
-
-## ⬜ Upcoming — Phase 1: PBIP Extraction + ChromaDB Ingestion
-*(Detail will be filled in when Phase 0 is confirmed complete)*
-
-**Entry requirement:** Phase 0 all tasks checked off.
-**First action in Phase 1:** Either (a) save your Power BI file as PBIP format and locate `model.bim`, or (b) edit `semantic/semantic_model.md` to describe your own data model. Then run `python ingest.py`.
-
----
-
-## ⬜ Upcoming — Phase 2: NL-to-SQL Agent + RAG Chain
-*(Detail will be filled in when Phase 1 is confirmed complete)*
-
-**Entry requirement:** ChromaDB populated, test retrieval returning correct documents.
-
----
-
-## ⬜ Upcoming — Phase 3: Streamlit Chatbot UI
-*(Detail will be filled in when Phase 2 is confirmed complete)*
-
-**Entry requirement:** `answer()` function returning correct answers in terminal.
-
----
+AI concepts learned:
+- Streamlit reruns entire script on every interaction
+- session_state persists data between reruns
+- st.spinner wraps slow operations (LLM call)
+- st.expander shows sources without cluttering the UI
 
 ## ⬜ Upcoming — Phase 4: Power BI Embed + Deploy
 *(Detail will be filled in when Phase 3 is confirmed complete)*
@@ -202,8 +125,9 @@ Phase 1 cannot start until:
 ## 📋 Phase Completion Log
 
 | Date | Phase | What was confirmed | Confirmed by |
-|---|---|---|---|
-| — | — | No phases completed yet | — |
+|27-06-2206|Phase 0| installation of dependent library, groq key, python venv|Avi|
+|28-06-2206|Phase 1| ingest.py, embedder.py and pbip_parser.py was created|Avi|
+|1-07-2026|Phase 1| ragchain.py was developed which called load llm,pbip_parser and embedder.py|Avi|
 
 ---
 
@@ -225,6 +149,3 @@ Phase 1 cannot start until:
 
 ---
 
-*Last updated: Session 1*
-*Current phase: Phase 0 — Environment setup*
-*Next action: Run `pip install -r requirements.txt` and complete Tasks 0.1–0.5*
