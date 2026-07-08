@@ -52,9 +52,9 @@ if prompt := st.chat_input("Ask a question about your data..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             result=answer(prompt)
-            st.markdown(result["answer"])
-            with st.expander("Sources Used"):
-                st.markdown(result["context"])
+        st.markdown(result["answer"])
+        with st.expander("Sources Used"):
+           st.markdown(result["context"])
            
 
     st.session_state.messages.append({"role":"assistant","content":result["answer"]})
