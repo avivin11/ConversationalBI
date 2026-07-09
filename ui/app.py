@@ -2,8 +2,7 @@
 
 import sys
 import os
-from dotenv import load_dotenv
-load_dotenv()
+
 # fix import path — same pattern as rag_chain.py
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
