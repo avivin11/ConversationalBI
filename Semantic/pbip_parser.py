@@ -40,8 +40,8 @@ import os
 import re
 from pathlib import Path
 from langchain_core.documents import Document
-from dotenv import load_dotenv
-load_dotenv()
+
+
 
 
 # ── Table name skip list ──────────────────────────────────────────────────────

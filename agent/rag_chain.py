@@ -1,9 +1,8 @@
 import sys
 import os
-from dotenv import load_dotenv
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-load_dotenv()
 
 from vectorstore.embedder import load_vectorstore, retrieve_context, format_context
 from langchain_groq import ChatGroq
