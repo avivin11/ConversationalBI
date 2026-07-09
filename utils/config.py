@@ -6,29 +6,40 @@ Reads everything from your .env file so nothing is hardcoded.
 """
 
 import os
-from dotenv import load_dotenv
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+import streamlit as st
 
-load_dotenv()
+def get_secret(key: str,default: str=None):
+    try:
+        return st.secrets[key]
+    except:
+        return os.getenv(key,default)
 
 # LLM settings
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-1.5-flash")
+
+
+GROQ_API_KEY = get_secret("GROQ_API_KEY")
+GROQ_MODEL =get_secret("GROQ_MODEL", "llama-3.3-70b-versatile")
+GEMINI_API_KEY = get_secret("GEMINI_API_KEY")
+GEMINI_MODEL = get_secret("GEMINI_MODEL", "gemini-1.5-flash")
 
 # Embedding model — runs locally on CPU, no API key needed
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 # ChromaDB settings
-CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")
-CHROMA_COLLECTION_NAME = os.getenv("CHROMA_COLLECTION_NAME", "semantic_model")
+CHROMA_PERSIST_DIR =get_secret("CHROMA_PERSIST_DIR", "./chroma_db")
+CHROMA_COLLECTION_NAME = get_secret("CHROMA_COLLECTION_NAME", "semantic_model")
 
 # Database
 DATABASE_URI = os.getenv("DATABASE_URI", "sqlite:///./data/sales.db")
 
 # Paths
 SEMANTIC_MODEL_PATH = "./semantic/semantic_model.md"
-TMDL_DEFINITION_PATH = os.getenv("TMDL_DEFINITION_PATH")
+TMDL_DEFINITION_PATH = get_secret("TMDL_DEFINITION_PATH")
 
 
 def validate_config():
