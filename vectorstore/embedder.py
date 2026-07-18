@@ -45,6 +45,14 @@ def build_vectorstore(documents: list[Document]) -> Chroma:
     """
     embeddings = get_embedding_model()
 
+    import chromadb
+    client=chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
+    existing=[c.name for c in client.list_collections()]
+    if CHROMA_COLLECTION_NAME in existing:
+        client.delete_collection(CHROMA_COLLECTION_NAME)
+
+
+
     print(f"📦 Building ChromaDB vectorstore...")
     print(f"   Documents to embed: {len(documents)}")
 
