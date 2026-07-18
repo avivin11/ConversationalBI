@@ -7,13 +7,13 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from vectorstore.embedder import load_vectorstore, retrieve_context, format_context
 from langchain_groq import ChatGroq
 
-def get_semantic_context(question: str) ->str:
+def get_semantic_context(question: str,VS) ->str:
     """
     Retrieve and format the context for a given question.
     This is the R in RAG — Retrieval.
     """
-    vectorstore=load_vectorstore()
-    docs=retrieve_context(question,vectorstore)
+    # vectorstore=load_vectorstore()
+    docs=retrieve_context(question,VS)
     string_context=format_context(docs)
     return string_context
 
@@ -45,11 +45,11 @@ def generate_answer(question: str, context:str) ->str:
     return response.content
 
 
-def answer(question: str) ->dict:
+def answer(question: str,VS) ->dict:
     """
     TThis function will be used outside to get the answer from LLM based on the question and context
     """
-    context=get_semantic_context(question)
+    context=get_semantic_context(question,VS)
     output=generate_answer(question,context)
 
     return {"question":question,"context":context,"answer":output}
