@@ -27,6 +27,14 @@ if "messages" not in st.session_state:
     st.session_state.messages=[]
 
 
+# Back button — shows on every page except landing page
+if st.session_state.mode is not None:
+    if st.button("← Back to Home"):
+        st.session_state.mode = None
+        st.session_state.vectorstore = None
+        st.session_state.messages = []
+        st.rerun()
+
 # Block 2 — initialise chat history
 # Only runs on the very first load, not on every rerun
 # "messages" will be a list of dicts: {"role": "user"/"assistant", "content": "..."}
@@ -61,6 +69,8 @@ if st.session_state.mode is None:
     st.stop()
 
 if st.session_state.vectorstore is None:
+    
+    
     #--Demo --Mode---------------------
     if st.session_state.mode=="demo":
         with st.spinner("loading data model..."):
