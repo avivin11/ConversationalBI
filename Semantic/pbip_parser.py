@@ -186,8 +186,18 @@ def parse_measures_as_individual_docs(filepath: str) -> list[Document]:
         measure_name = match.group(1).strip()
         expression_raw = match.group(2).strip()
         # First line is the DAX formula, rest may include formatString etc.
-        expression_lines = expression_raw.split("\n")
-        formula = expression_lines[0].strip()
+        formula_lines=[]
+        for line in expression_raw.split("\n"):
+            stripped = line.strip()
+            if stripped.startswith("formatString") or \
+                stripped.startswith("displayFolder") or \
+                stripped.startswith("annotation") or \
+                stripped.startswith("lineageTag") or \
+                stripped.startswith("description"):
+                break
+            formula_lines.append(line)
+
+        formula = "\n".join(formula_lines).strip()
 
         doc_content = (
             f"## DAX Measure: {measure_name}\n\n"
